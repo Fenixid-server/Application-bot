@@ -1,0 +1,27 @@
+# Bot Details
+FENIX_ABOUT_TYPE=Programming
+OWNER_NUMBER=94773010580
+USER_TIMEZONE=Asia/Colombo
+FENIX_NAME=Unknown Friend
+
+# Welcome Messages
+FENIX_WEL_1=Your Number Has Been Auto Saved🫠
+FENIX_WEL_2=Save And Alert Me If Save 🌹
+FENIX_WEL_3=Save and Alert me✅
+
+# Bot Profile Details
+BOT_NAME=FENX ID OWNER
+BOT_AGE=26
+BOT_LOCATION=SRILANKA
+BOT_EMAIL=privateloginemails@gmail.com
+
+# Relax Wishes
+RELAX_WISHES=Take a deep breath... 🌿
+
+# MongoDB Settings
+MONGO_URI=mongodb+srv://Own:Own@cluster0.aahbv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+DB_NAME=Own
+
+# Collections
+COLLECTION_CONTACTS=contacts
+COLLECTION_GOOGLE_AUTH=google_auth
