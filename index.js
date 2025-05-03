@@ -169,8 +169,45 @@ async function connectToWhatsApp() {
 
         msg.text = msg.type == "conversation" ? msg.message.conversation : 
                   (msg.message[msg.type]?.text || "");  
+const isGroup = msg.key.remoteJid.endsWith("@g.us");
+const isText = msg.message?.conversation || msg.message?.extendedTextMessage?.text;
+const sender = msg.key.participant || msg.key.remoteJid;
 
-        const prefixes = [".", "#", "!", "/"];  
+if (isGroup && isText && !msg.key.fromMe) {
+    try {
+        const groupMetadata = await sock.groupMetadata(msg.key.remoteJid);
+        const botNumber = sock.user.id.split(':')[0] + '@s.whatsapp.net';
+        const isBotAdmin = groupMetadata.participants.some(p => p.id === botNumber && ['admin', 'superadmin'].includes(p.admin));
+
+        if (isBotAdmin) {
+            // Delete the message first
+            await sock.sendMessage(msg.key.remoteJid, {
+                delete: {
+                    id: msg.key.id,
+                    remoteJid: msg.key.remoteJid,
+                    participant: sender,
+                    fromMe: false
+                }
+            });
+
+            // Wait a moment before sending the warning
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            // Send warning to the user
+            await sock.sendMessage(msg.key.remoteJid, {
+                text: `@${sender.split('@')[0]} \nAllowed Only images/videos\n*Group Protection By Fenixid🛒*`,
+                mentions: [sender]
+            }, {
+                quoted: null // Ensure it's not a quoted reply
+            });
+        } else {
+            console.log("Bot is not admin, can't delete messages");
+        }
+    } catch (err) {
+        console.error("Error in message deletion:", err);
+    }
+}   
+     const prefixes = [".", "#", "!", "/"];  
         let prefix = prefixes.find(p => msg.text.startsWith(p));  
 
         if (msg.key.fromMe && !prefix) {
@@ -209,6 +246,7 @@ async function connectToWhatsApp() {
                     break;
             }
         }
+        
     });  
 }
 
